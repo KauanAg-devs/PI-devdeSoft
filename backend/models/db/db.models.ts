@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-mongoose.model('myColl', new Schema({
+export default mongoose.model('myColl', new Schema({
     name: String,
     password: String
 }))
