@@ -1,23 +1,26 @@
 import express from 'express'
-import { Crud } from '../controllers/routers.helpers'
+import crudHandler from '../controllers/routers.functions';
+const crud = new crudHandler()
 const Router = express.Router()
- const apiCrud = new Crud()
-Router.get('/api', async (req,res)=>{
- const user = await apiCrud.post({name: req.query.name as string, password: req.query.password as string})
- res.status(200).json({message: user})
-})
+import passport from 'passport'
+import { Strategy } from 'passport-local';
+import userModel from '../models/db/db.models';
+
+passport.use(new Strategy((username,password, done)=>{
+    if (username && password) {
+      userModel.findOne({name: username}, (err: any, user: string)=>{
+        console.log(user);
+        
+      })
+    }
+    
   
-Router.post('/api', (req,res)=>{
+  }))
 
-})
-
-Router.delete('/api', (req,res)=>{
-
-})
-
-Router.put('/api', (req,res)=>{
-
-})
+Router.get('/api/:name', passport.authenticate('local',{failureRedirect: '/api/post'}),crud.getHandler);
+Router.post('/api/post', crud.postHandler);
+Router.delete('/api', crud.deleteHandler);
+Router.put('/api', crud.putHandler);
 
 
 export default Router

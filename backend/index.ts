@@ -1,10 +1,12 @@
 import express from 'express'
 import run from './models/db/db.conn'
-import userModel from './models/db/db.models'
 import Router from './routes/api.routes'
+import cors from 'cors'
 const app = express()
-
 const PORT = 5000
+app.use(cors())
+app.use(express.json())
+ 
 run()
  .then(()=>{
     console.log(`database loading...`)
