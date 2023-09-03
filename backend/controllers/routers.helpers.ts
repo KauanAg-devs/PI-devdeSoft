@@ -11,7 +11,7 @@ interface updateAccount extends acc {
 
 type PromiseReturned = Promise<Document | null>
 
-export class Crud {
+export default class Crud {
     public async read(name: string): PromiseReturned{
        return userModel.findOne({name: name})
     }

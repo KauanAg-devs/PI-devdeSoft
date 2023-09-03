@@ -1,4 +1,4 @@
-import {Crud} from '../controllers/routers.helpers'
+import Crud from '../controllers/routers.helpers'
 const apiCrud = new Crud()
 
 interface RequestBody {
@@ -21,35 +21,28 @@ function jsonResponse(res: any, user: Document | null | undefined, message: stri
 
 class crudHandler {
 
-    public async getHandler(req: any,res: any){
+    public getHandler = async (req: any,res: any)=> {
     const {name}: RequestBody = req.params
     const user = await apiCrud.read(name)
-    jsonResponse(res, user,  `user not found \n value: ${user}`, 200, 404)
-    
+    jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
     }
 
 
-    public async deleteHandler(req: any,res: any){
+    public deleteHandler = async (req: any,res: any)=> {
     const {name, password}:RequestBody = req.body
-    let user
-    if (name && password) 
-        user = await apiCrud.delete({name, password});
-    jsonResponse(res, user,  `user not found \n value: ${user}`, 200, 404)
+    const user = await apiCrud.delete({name, password})
+    jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
     }
 
-    public async postHandler(req: any,res: any){
-    const {name, password}:RequestBody = req.body
-    var user;
-    if (name && password && user != '' && password !='') 
-        user = await apiCrud.post({ name, password }) as unknown as Document;
+    public postHandler = async (req: any,res: any)=> {
+    const {name, password}:RequestBody = req.body 
+    const user = await apiCrud.post({ name, password }) as unknown as Document;
     jsonResponse(res, user, `user wasnt accepted \n value: ${user}.`, 200, 406)
     }
 
-    public async putHandler(req: any,res: any){
+    public putHandler = async (req: any,res: any)=> {
     const {oldName, oldPassword, name, password}:RequestBodyforUpdate = req.body
-    let user;      
-    if (name && password && oldName && oldPassword) 
-        user = await apiCrud.put({oldName, oldPassword, name, password});
+    const user = await apiCrud.put({oldName, oldPassword, name, password});
     jsonResponse(res,user, `user doesn't exists ${user}`, 200, 404)
     }
 }
