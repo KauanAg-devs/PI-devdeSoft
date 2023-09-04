@@ -3,10 +3,16 @@ import run from './models/db/db.conn'
 import Router from './routes/api.routes'
 import cors from 'cors'
 import dotenv from 'dotenv'
+
 dotenv.config()
 const app = express()
 const PORT =  process.env.PORT ?? 3000
-app.use(cors())
+
+app.use(cors({
+   methods: ['POST', 'GET', 'PUT', 'DELETE'],
+   origin: 'http://localhost:5173'
+}))
+
 app.use(express.json())
  
 run()

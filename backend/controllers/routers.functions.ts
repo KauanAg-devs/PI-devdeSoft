@@ -2,48 +2,46 @@ import Crud from '../controllers/routers.helpers'
 const apiCrud = new Crud()
 
 interface RequestBody {
-    name: string;
+    email: string;
     password: string;
   }
 
 interface RequestBodyforUpdate extends RequestBody {
-    oldName: string,
+    oldEmail: string,
     oldPassword: string
   }
 
-
-function jsonResponse(res: any, user: Document | null | undefined, message: string, httpOK: number, httpError: number) {
-    res
-      .status(user ? httpOK : httpError)
-      .json({message: user ?? message})
-    }
+  type userType =  Document | null | undefined
 
 
 class crudHandler {
+    private jsonResponse(res: any, user: userType, message: string, httpOK: number, httpError: number) {
+      res.status(user ? httpOK : httpError).json({message: user ?? message}) 
+    }
 
     public getHandler = async (req: any,res: any)=> {
-    const {name}: RequestBody = req.params
-    const user = await apiCrud.read(name)
-    jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
+      const {email}: RequestBody = req.params
+      const user = await apiCrud.read(email)
+      this.jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
     }
 
 
     public deleteHandler = async (req: any,res: any)=> {
-    const {name, password}:RequestBody = req.body
-    const user = await apiCrud.delete({name, password})
-    jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
+      const {email, password}: RequestBody = req.body
+      const user = await apiCrud.delete({email, password})
+      this.jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
     }
 
     public postHandler = async (req: any,res: any)=> {
-    const {name, password}:RequestBody = req.body 
-    const user = await apiCrud.post({ name, password }) as unknown as Document;
-    jsonResponse(res, user, `user wasnt accepted \n value: ${user}.`, 200, 406)
+      const {email, password}: RequestBody = req.body 
+      const user = await apiCrud.post({ email, password })
+      this.jsonResponse(res, user, `user wasnt accepted \n value: ${user}.`, 200, 406)
     }
 
     public putHandler = async (req: any,res: any)=> {
-    const {oldName, oldPassword, name, password}:RequestBodyforUpdate = req.body
-    const user = await apiCrud.put({oldName, oldPassword, name, password});
-    jsonResponse(res,user, `user doesn't exists ${user}`, 200, 404)
+      const {oldEmail, oldPassword, email, password}: RequestBodyforUpdate = req.body
+      const user = await apiCrud.put({oldEmail, oldPassword, email, password});
+      this.jsonResponse(res,user, `user doesn't exists ${user}`, 200, 404)
     }
 }
 
