@@ -1,4 +1,4 @@
-import Crud from '../controllers/routers.helpers'
+import Crud from './routers.crud'
 const apiCrud = new Crud()
 
 interface RequestBody {
@@ -14,7 +14,7 @@ interface RequestBodyforUpdate extends RequestBody {
   type userType =  Document | null | undefined
 
 
-class crudHandler {
+class HttpReqs {
     private jsonResponse(res: any, user: userType, message: string, httpOK: number, httpError: number) {
       res.status(user ? httpOK : httpError).json({message: user ?? message}) 
     }
@@ -25,21 +25,15 @@ class crudHandler {
       this.jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
     }
 
-
     public deleteHandler = async (req: any,res: any)=> {
       const {name, password}: RequestBody = req.body
       const user = await apiCrud.delete({name, password})
       this.jsonResponse(res, user, `user not found \n value: ${user}`, 200, 404)
     }
 
-    public deleteAllHandler = async (req: any,res: any)=> {
-      const user = await apiCrud.deleteAll() as unknown as Document
-      this.jsonResponse(res, user ,`everyone deleted`, 200, 404)
-    }
-
     public postHandler = async (req: any,res: any)=> {
       const {name, password}: RequestBody = req.body 
-      const user = await apiCrud.post({ name, password })
+      const user = await apiCrud.post({ name, password }) as Document
       this.jsonResponse(res, user, `user wasnt accepted \n value: ${user}.`, 200, 406)
     }
 
@@ -50,6 +44,11 @@ class crudHandler {
     }
 }
 
+export class ApiMiddlewares {
+    public verifyAccount(){
+
+    }
+}
 
 
-export default crudHandler
+export default HttpReqs

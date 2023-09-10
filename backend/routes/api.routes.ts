@@ -1,13 +1,19 @@
 import express from 'express'
-import crudHandler from '../controllers/routers.functions';
-const crud = new crudHandler()
-const Router = express.Router()
+import httpReqs from '../controllers/routers.functions';
+import Crud from '../controllers/routers.crud';
 
-Router.get('/api/:email', crud.getHandler);
+const Router = express.Router()
+const crud = new httpReqs()
+
+Router.use((req: any, res: any, next: any)=>{
+    const crud = new Crud()
+    next()
+  })
+
+Router.get('/api/:name', crud.getHandler);
 Router.post('/api/post', crud.postHandler);
 Router.delete('/api/delete', crud.deleteHandler);
 Router.put('/api/put', crud.putHandler);
-Router.delete('/api/deleteAll', crud.deleteAllHandler);
 
 
 export default Router
