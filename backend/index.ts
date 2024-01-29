@@ -10,7 +10,7 @@ const PORT =  process.env.PORT ?? 3000
 app.use(express.json())
 
 app.use(cors({
-   origin: `exp://10.0.0.107:8081`,
+   origin: process.env.APPURI,
    optionsSuccessStatus: 200
 }))
 
